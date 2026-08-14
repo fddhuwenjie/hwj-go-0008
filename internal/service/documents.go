@@ -299,7 +299,7 @@ func (s *Service) BatchUpdateDocuments(ctx context.Context, req BatchUpdateReque
 		}
 		defer func() {
 			entry := &idemEntry{fingerprint: fp, err: err}
-			if out != nil {
+			if out != nil && err == nil {
 				entry.value = cloneIDemValue(out)
 			}
 			s.idem[req.IdempotencyKey] = entry
