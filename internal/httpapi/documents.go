@@ -76,7 +76,7 @@ func (s *Server) handleBatchUpdate(w http.ResponseWriter, r *http.Request) {
 			status, erresp := mapError(err)
 			erresp.Detail = mergeDetail(erresp.Detail, map[string]any{
 				"applied":  res.Applied,
-				"failures": res.Failures,
+				"failures": res.Results,
 			})
 			writeJSON(w, status, erresp)
 			return
