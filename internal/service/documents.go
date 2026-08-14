@@ -427,11 +427,11 @@ func (s *Service) ListDocuments(ctx context.Context, collectionID string, filter
 			continue
 		}
 		out = append(out, doc.Clone())
-		if filter.Limit > 0 && len(out) >= filter.Limit {
-			break
-		}
 	}
 	sort.Slice(out, func(i, j int) bool { return out[i].ID < out[j].ID })
+	if filter.Limit > 0 && len(out) > filter.Limit {
+		out = out[:filter.Limit]
+	}
 	return out, nil
 }
 
