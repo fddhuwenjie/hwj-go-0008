@@ -27,7 +27,11 @@ func (s *Service) ListAuditEvents(ctx context.Context, filter domain.AuditFilter
 	defer s.mu.RUnlock()
 
 	out := make([]domain.AuditEvent, 0)
-	for _, e := range s.audit {
+	events := s.audit
+	if filter.Limit > 0 && len(events) > filter.Limit {
+		events = events[len(events)-filter.Limit:]
+	}
+	for _, e := range events {
 		if filter.CollectionID != "" && e.CollectionID != filter.CollectionID {
 			continue
 		}
@@ -46,9 +50,5 @@ func (s *Service) ListAuditEvents(ctx context.Context, filter domain.AuditFilter
 		out = append(out, e.Clone())
 	}
 
-	// When a Limit is set, return the most recent matches.
-	if filter.Limit > 0 && len(out) > filter.Limit {
-		out = out[len(out)-filter.Limit:]
-	}
 	return out, nil
 }
