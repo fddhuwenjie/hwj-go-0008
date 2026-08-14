@@ -102,9 +102,7 @@ func (s *Service) AcquireLock(ctx context.Context, req AcquireLockRequest) (out 
 	var lock *domain.Lock
 	if ok {
 		// Renew existing same-holder lock.
-		renewedAt := existing.ExpiresAt
-		existing.AcquiredAt = renewedAt
-		existing.ExpiresAt = renewedAt.Add(ttl)
+		existing.ExpiresAt = now.Add(ttl)
 		existing.RenewCount++
 		lock = existing
 		s.appendAudit(domain.AuditEvent{
