@@ -74,7 +74,7 @@ func (s *Server) handleRenewLock(w http.ResponseWriter, r *http.Request) {
 func (s *Server) handleReleaseLock(w http.ResponseWriter, r *http.Request) {
 	// DELETE bodies are allowed but often empty; accept holder from query or body.
 	var body lockBody
-	if r.Body != nil {
+	if r.ContentLength != 0 {
 		if err := decodeJSON(r, &body); err != nil {
 			writeError(w, badRequest("invalid JSON body: "+err.Error()))
 			return
